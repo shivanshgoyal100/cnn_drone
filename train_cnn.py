@@ -3,8 +3,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, Input
 
-# 1. High-Intensity Augmentation
-# This forces the model to look at finger details, not the background
+# For model to look at finger details, not the background
 datagen = ImageDataGenerator(
     rescale=1./255,
     horizontal_flip=True,
@@ -12,7 +11,7 @@ datagen = ImageDataGenerator(
     zoom_range=0.3,      
     width_shift_range=0.2,
     height_shift_range=0.2,
-    brightness_range=[0.5, 1.5], # Crucial for your dark hand/bright wall contrast
+    brightness_range=[0.5, 1.5], # for dark hand/bright wall contrast
     validation_split=0.2
 )
 
@@ -24,7 +23,6 @@ train_gen = datagen.flow_from_directory(
     subset='training'
 )
 
-# 2. Advanced Model Architecture
 # We add more filters (128) to help the model see the fine lines of multiple fingers
 model = Sequential([
     Input(shape=(128, 128, 3)),
@@ -42,8 +40,7 @@ model = Sequential([
 
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-# 3. Train for 50 Epochs
-# Since your accuracy was low, we must give it more time to converge
+
 print("Starting deep training (50 Epochs)...")
 model.fit(train_gen, epochs=50) 
 
